@@ -1,18 +1,15 @@
+import { HtmlReport } from './reportTargets/HtmlReport';
+import { ConsoleReports } from './reportTargets/ConsoleReports';
+import { WinsAnalysis } from './analyzers/WinsAnalysis';
+import { Summary } from './Summary';
 import { CsvFileReader } from './CsvFileReader';
 import { MatchReader } from './MatchReader';
-import { MatchResult } from './MatchResult';
 
 const csvFileReader = new CsvFileReader('football.csv');
 
 const matchReader = new MatchReader(csvFileReader);
 matchReader.load();
 
-let arsenalWins = 0;
+const summary = Summary.winsAnalysisWithHtmlReports('Arsenal', 'report.html');
 
-for (let match of matchReader.matches) {
-  if (match[1] === 'Arsenal' && match[5] === MatchResult.HomeWin) arsenalWins++;
-  else if (match[2] === 'Arsenal' && match[5] === MatchResult.AwayWin)
-    arsenalWins++;
-}
-
-console.log(`Arsenal won ${arsenalWins} games`);
+summary.buildAndPrintReport(matchReader.matches);
